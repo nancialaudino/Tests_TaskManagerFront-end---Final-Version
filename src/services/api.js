@@ -1,20 +1,32 @@
-import axios from 'axios'
+import axios from 'axios';
 
 const apiClient = axios.create({
-    baseURL: '/tasks', // Le proxy redirigera vers http://localhost:8080/tasks
-    headers: {
-        'Content-Type': 'application/json',
-    },
-})
+  baseURL: '/', // O proxy do Vite redireciona /tasks → http://localhost:8080
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
-// Ajouter un intercepteur pour logger les requêtes
-apiClient.interceptors.request.use((request) => {
-    console.log('Starting Request', request)
-    return request
-})
+// Log das requisições
+apiClient.interceptors.request.use(request => {
+  console.log('Starting Request', request);
+  return request;
+});
 
 export const api = {
-    getHello() {
-        return apiClient.get(`/hello`)
-    },
-}
+  getHello() {
+    return apiClient.get('tasks/hello');
+  },
+  getTasks() {
+    return apiClient.get('tasks');
+  },
+  addTask(description) {
+    return apiClient.post('tasks', { description });
+  },
+  completeTask(id) {
+    return apiClient.put(`tasks/${id}/complete`);
+  },
+  deleteTask(id) {
+    return apiClient.delete(`tasks/${id}`);
+  }
+};
